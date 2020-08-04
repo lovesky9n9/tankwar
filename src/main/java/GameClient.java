@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameClient extends JComponent {
@@ -11,6 +12,7 @@ public class GameClient extends JComponent {
     private int screenHeight;
     private Tank playerTank;//玩家坦克
     private List<Tank> enemyTanks=new ArrayList<>();//敵方坦克
+    private List<Wall> walls=new ArrayList<>();//圍牆
     private boolean stop;
 
     GameClient() {//預設視窗大小
@@ -34,13 +36,19 @@ public class GameClient extends JComponent {
         }).start();
     }
 
-    public void init() {//設定坦克初始屬性
-        playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN);
+    public void init() {//遊戲初始屬性
+        playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN);//玩家屬性
         for(int i=0;i<3;i++){
             for(int j=0;j<4;j++){
-                enemyTanks.add(new Tank(360+j*80,500+i*80,Direction.UP,true));
+                enemyTanks.add(new Tank(360+j*80,500+i*80,Direction.UP,true));//敵方坦克
             }
         }
+        Wall[] walls={
+                new Wall(250,150,true,15),
+                new Wall(150,200,false,15),
+                new Wall(800,200,false,15),
+        };
+        this.walls.addAll(Arrays.asList(walls));//圍牆
     }
 
     @Override
@@ -48,6 +56,9 @@ public class GameClient extends JComponent {
         playerTank.draw(g);
         for(Tank tank:enemyTanks){
             tank.draw(g);
+        }
+        for(Wall wall:walls){
+            wall.draw(g);
         }
     }
 
