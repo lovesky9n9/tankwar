@@ -3,11 +3,14 @@ import sun.security.mscapi.CPublicKey;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
-    private Tank playerTank;
+    private Tank playerTank;//玩家坦克
+    private List<Tank> enemyTanks=new ArrayList<>();//敵方坦克
     private boolean stop;
 
     GameClient() {//預設視窗大小
@@ -32,12 +35,20 @@ public class GameClient extends JComponent {
     }
 
     public void init() {//設定坦克初始屬性
-        playerTank = new Tank(getCenterPosX(47), getCenterPosY(47), Direction.DOWN);
+        playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN);
+        for(int i=0;i<3;i++){
+            for(int j=0;j<4;j++){
+                enemyTanks.add(new Tank(360+j*80,500+i*80,Direction.UP,true));
+            }
+        }
     }
 
     @Override
-    protected void paintComponent(Graphics g) {//輸出玩家坦克
+    protected void paintComponent(Graphics g) {//顯示坦克
         playerTank.draw(g);
+        for(Tank tank:enemyTanks){
+            tank.draw(g);
+        }
     }
 
     public int getCenterPosX(int width) {//(螢幕大小-圖檔大小)/2 X軸置中運算

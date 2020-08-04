@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tank {
     private int x;
@@ -8,12 +10,22 @@ public class Tank {
     private Direction direction;
     //上下左右四個方向
     private boolean[] dirs = new boolean[4];
+    private boolean enemy;
 
-    public Tank(int x, int y, Direction direction) {
+    public Tank(int x, int y, Direction direction) {//玩家坦克
+        this(x, y, direction, false);
+    }
+
+    public Tank(int x, int y, Direction direction, boolean enemy) {//敵方坦克
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.speed = 5;
+        this.enemy = enemy;
+    }
+
+    public boolean[] getDirs() {
+        return dirs;
     }
 
     public int getX() {
@@ -48,31 +60,30 @@ public class Tank {
         this.direction = direction;
     }
 
-    public boolean[] getDirs() {
-        return dirs;
-    }
-
     public Image getImage() {//取得坦克圖檔
+
+        String name = enemy ? "etank" : "itank";
+
         if (direction == Direction.UP)
-            return new ImageIcon("assets/images/itankU.png").getImage();
+            return new ImageIcon("assets/images/" + name + "U.png").getImage();
         if (direction == Direction.DOWN)
-            return new ImageIcon("assets/images/itankD.png").getImage();
+            return new ImageIcon("assets/images/" + name + "D.png").getImage();
         if (direction == Direction.LEFT)
-            return new ImageIcon("assets/images/itankL.png").getImage();
+            return new ImageIcon("assets/images/" + name + "L.png").getImage();
         if (direction == Direction.RIGHT)
-            return new ImageIcon("assets/images/itankR.png").getImage();
+            return new ImageIcon("assets/images/" + name + "R.png").getImage();
         if (direction == Direction.UP_RIGHT)
-            return new ImageIcon("assets/images/itankRU.png").getImage();
+            return new ImageIcon("assets/images//" + name + "RU.png").getImage();
         if (direction == Direction.UP_LEFT)
-            return new ImageIcon("assets/images/itankLU.png").getImage();
+            return new ImageIcon("assets/images//" + name + "LU.png").getImage();
         if (direction == Direction.DOWN_RIGHT)
-            return new ImageIcon("assets/images/itankRD.png").getImage();
+            return new ImageIcon("assets/images//" + name + "RD.png").getImage();
         if (direction == Direction.DOWN_LEFT)
-            return new ImageIcon("assets/images/itankLD.png").getImage();
+            return new ImageIcon("assets/images//" + name + "LD.png").getImage();
         return null;
     }
 
-    public void move() {//移動坦克座標
+    public void move() {//移動坦克
         switch (direction) {
             case UP:
                 y -= speed;
@@ -117,19 +128,20 @@ public class Tank {
     }
 
     public void draw(Graphics g) {//整合輸出坦克
-        if (!isStop()) {
+        if (isStop()) {
             determineDirection();
             move();
         }
         g.drawImage(getImage(), x, y, null);
     }
 
-    public boolean isStop() {
-        for (int i = 0; i < dirs.length; i++) {
-            if (dirs[i]) {
-                return false;
+    public boolean isStop() {//判斷未按下按鍵則停止坦克
+        for (boolean dir : dirs) {
+            if (dir) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
+
