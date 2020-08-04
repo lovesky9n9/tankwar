@@ -3,20 +3,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tank {
+public class Tank extends GameObject{
     private int x;
     private int y;
     private int speed;
     private Direction direction;
-    //上下左右四個方向
-    private boolean[] dirs = new boolean[4];
+    private boolean[] dirs = new boolean[4];//上下左右四個方向
     private boolean enemy;
 
-    public Tank(int x, int y, Direction direction) {//玩家坦克
-        this(x, y, direction, false);
+    public Tank(int x, int y, Direction direction,Image[] image) {//玩家坦克
+        this(x, y, direction, false,image);
     }
 
-    public Tank(int x, int y, Direction direction, boolean enemy) {//敵方坦克
+    public Tank(int x, int y, Direction direction, boolean enemy,Image[] image) {//敵方坦克
+        super(x,y,image);
         this.x = x;
         this.y = y;
         this.direction = direction;
