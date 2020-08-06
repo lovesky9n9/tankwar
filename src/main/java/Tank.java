@@ -3,29 +3,23 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tank extends GameObject{
-    private int x;
-    private int y;
+public class Tank extends GameObject {
     private int speed;
     private Direction direction;
     private boolean[] dirs = new boolean[4];//上下左右四個方向
     private boolean enemy;
 
-    public Tank(int x, int y, Direction direction,Image[] image) {//玩家坦克
-        this(x, y, direction, false,image);
+    public Tank(int x, int y, Direction direction, Image[] image) {//玩家坦克
+        this(x, y, direction, false, image);
     }
 
-    public Tank(int x, int y, Direction direction, boolean enemy,Image[] image) {//敵方坦克
-        super(x,y,image);
+    public Tank(int x, int y, Direction direction, boolean enemy, Image[] image) {//敵方坦克
+        super(x, y, image);
         this.x = x;
         this.y = y;
         this.direction = direction;
-        this.speed = 5;
+        this.speed = 15;
         this.enemy = enemy;
-    }
-
-    public boolean[] getDirs() {
-        return dirs;
     }
 
     public int getX() {
@@ -60,7 +54,13 @@ public class Tank extends GameObject{
         this.direction = direction;
     }
 
+    public boolean[] getDirs() {
+        return dirs;
+    }
+
     public void move() {//移動坦克
+        oldX = x;
+        oldY = y;
         switch (direction) {
             case UP:
                 y -= speed;
@@ -108,6 +108,7 @@ public class Tank extends GameObject{
         if (isStop()) {
             determineDirection();
             move();
+            collision();
         }
         g.drawImage(image[direction.ordinal()], x, y, null);//direction.ordinal()取得方向
     }
@@ -120,5 +121,32 @@ public class Tank extends GameObject{
         }
         return false;
     }
+
+    public void collision() {
+        //邊界偵測
+        if (x < 0) {
+            x = 0;
+        } else if (x > TankWar.gameClient.getScreenWidth() - width) {
+            x = TankWar.gameClient.getScreenWidth() - width;
+        }
+        if (y < 0) {
+            y = 0;
+        } else if (y > TankWar.gameClient.getScreenHeight() - height) {
+            y = TankWar.gameClient.getScreenHeight() - height;
+        }
+
+        //圍牆、敵方坦克碰撞偵測
+        for (GameObject object : TankWar.gameClient.getGameObjects()) {
+            if (object != this && object.getRectangle().intersects(this.getRectangle())) {
+                x = oldX;
+                y = oldY;
+                return;
+            }
+        }
+    }
+
+//    public void fire(){
+//        TankWar.gameClient.addGameObject();
+//    }
 }
 

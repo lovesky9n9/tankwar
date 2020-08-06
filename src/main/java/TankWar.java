@@ -3,14 +3,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class TankWar {
+    public static GameClient gameClient;
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        final GameClient gameClient = new GameClient();
+        gameClient = new GameClient();
         frame.add(gameClient);//可設定視窗大小，為空則為預設大小
         frame.setTitle("TankWar");//視窗title名稱
+        frame.pack();//畫面展開
+        frame.setLocationRelativeTo(null);//置中顯示
         frame.setVisible(true);//顯示視窗
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//視窗關閉程式停止
-        frame.pack();//畫面展開
 
         frame.addKeyListener(new KeyAdapter() {
             @Override

@@ -19,6 +19,18 @@ public class GameClient extends JComponent {
         this(1024, 768);
     }
 
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
     public GameClient(int screenWidth, int screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -62,6 +74,8 @@ public class GameClient extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {//顯示坦克
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, getScreenWidth(), getScreenHeight());
         for (GameObject object : gameObjects) {
             object.draw(g);
         }
@@ -86,6 +100,9 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_RIGHT:
                 dirs[3] = true;
                 break;
+//            case KeyEvent.VK_CONTROL:
+//                playerTank.fire();
+//                break;
             default:
         }
     }
@@ -108,4 +125,10 @@ public class GameClient extends JComponent {
             default:
         }
     }
+
+//    public static Image[] bulletImage =new Image[8];//子彈圖片
+
+//    public void addGameObject(GameObject gameObject){//增加物件
+//        gameObjects.add(gameObject);
+//    }
 }
