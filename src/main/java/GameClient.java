@@ -12,8 +12,6 @@ public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
     private Tank playerTank;//玩家坦克
-//    private List<Tank> enemyTanks = new ArrayList<>();//敵方坦克
-//    private List<Wall> walls = new ArrayList<>();//圍牆
     private List<GameObject> gameObjects = new ArrayList<>();//統一GameObject控管
     private boolean stop;
 
@@ -42,8 +40,7 @@ public class GameClient extends JComponent {
         Image[] brickImage = {Tools.getImage("brick")};
         Image[] iTankImage = new Image[8];
         Image[] eTankImage = new Image[8];
-        String[] sub = {"U", "D", "L", "R", "LU", "RU", "RD", "LD"};
-
+        String[] sub = {"U", "D", "L", "R", "LU", "RU", "LD", "RD"};
         for (int i = 0; i < iTankImage.length; i++) {
             iTankImage[i] = Tools.getImage("itank" + sub[i]);
             eTankImage[i] = Tools.getImage("etank" + sub[i]);
@@ -54,21 +51,13 @@ public class GameClient extends JComponent {
         //敵方坦克enemyTanks
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-//                enemyTanks.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
                 gameObjects.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
             }
         }
         //圍牆walls
-//        Wall[] walls = {
-//                new Wall(250, 150, true, 15, brickImage),
-//                new Wall(150, 200, false, 15, brickImage),
-//                new Wall(800, 200, false, 15, brickImage),
-//        };
-//        this.walls.addAll(Arrays.asList(walls));
         gameObjects.add(new Wall(250, 150, true, 15, brickImage));
         gameObjects.add(new Wall(150, 200, false, 15, brickImage));
         gameObjects.add(new Wall(800, 200, false, 15, brickImage));
-
     }
 
     @Override
@@ -76,21 +65,10 @@ public class GameClient extends JComponent {
         for (GameObject object : gameObjects) {
             object.draw(g);
         }
-//        playerTank.draw(g);
-//        for (Tank tank : enemyTanks) {
-//            tank.draw(g);
-//        }
-//        for (Wall wall : walls) {
-//            wall.draw(g);
-//        }
     }
 
     public int getCenterPosX(int width) {//(螢幕大小-圖檔大小)/2 X軸置中運算
         return (screenWidth - width) / 2;
-    }
-
-    public int getCenterPosY(int height) {//(螢幕大小-圖檔大小)/2 Y軸置中運算
-        return (screenHeight - height) / 2;
     }
 
     public void keyPressed(KeyEvent e) {//偵測按鍵按下後移動

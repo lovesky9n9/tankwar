@@ -60,29 +60,6 @@ public class Tank extends GameObject{
         this.direction = direction;
     }
 
-    public Image getImage() {//取得坦克圖檔
-
-        String name = enemy ? "etank" : "itank";
-
-        if (direction == Direction.UP)
-            return new ImageIcon("assets/images/" + name + "U.png").getImage();
-        if (direction == Direction.DOWN)
-            return new ImageIcon("assets/images/" + name + "D.png").getImage();
-        if (direction == Direction.LEFT)
-            return new ImageIcon("assets/images/" + name + "L.png").getImage();
-        if (direction == Direction.RIGHT)
-            return new ImageIcon("assets/images/" + name + "R.png").getImage();
-        if (direction == Direction.UP_RIGHT)
-            return new ImageIcon("assets/images//" + name + "RU.png").getImage();
-        if (direction == Direction.UP_LEFT)
-            return new ImageIcon("assets/images//" + name + "LU.png").getImage();
-        if (direction == Direction.DOWN_RIGHT)
-            return new ImageIcon("assets/images//" + name + "RD.png").getImage();
-        if (direction == Direction.DOWN_LEFT)
-            return new ImageIcon("assets/images//" + name + "LD.png").getImage();
-        return null;
-    }
-
     public void move() {//移動坦克
         switch (direction) {
             case UP:
@@ -132,7 +109,7 @@ public class Tank extends GameObject{
             determineDirection();
             move();
         }
-        g.drawImage(getImage(), x, y, null);
+        g.drawImage(image[direction.ordinal()], x, y, null);//direction.ordinal()取得方向
     }
 
     public boolean isStop() {//判斷未按下按鍵則停止坦克
