@@ -3,9 +3,9 @@ import java.awt.*;
 public abstract class GameObject {
     protected int x;
     protected int y;
+    protected Image[] image;
     protected int width;
     protected int height;
-    protected Image[] image;
 
     public GameObject(int x, int y, Image[] image) {
         this.x = x;

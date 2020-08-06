@@ -12,17 +12,9 @@ public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
     private Tank playerTank;//玩家坦克
-    private List<Tank> enemyTanks = new ArrayList<>();//敵方坦克
-    private List<Wall> walls = new ArrayList<>();//圍牆
-    private List<GameObject> objects = new ArrayList<>();
-//    objects.add(playerTank);
-//    objects.addAll(walls);
-//    objects.addAll(enemyTanks);
-//    for(GameObject object:objects){
-//        object.draw(g);
-//    }
-
-
+//    private List<Tank> enemyTanks = new ArrayList<>();//敵方坦克
+//    private List<Wall> walls = new ArrayList<>();//圍牆
+    private List<GameObject> gameObjects = new ArrayList<>();//統一GameObject控管
     private boolean stop;
 
     GameClient() {//預設視窗大小
@@ -58,30 +50,39 @@ public class GameClient extends JComponent {
         }
         //玩家坦克
         playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN, iTankImage);
-        //敵方坦克
+        gameObjects.add(playerTank);
+        //敵方坦克enemyTanks
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                enemyTanks.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
+//                enemyTanks.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
+                gameObjects.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
             }
         }
-        //圍牆
-        Wall[] walls = {
-                new Wall(250, 150, true, 15, brickImage),
-                new Wall(150, 200, false, 15, brickImage),
-                new Wall(800, 200, false, 15, brickImage),
-        };
-        this.walls.addAll(Arrays.asList(walls));
+        //圍牆walls
+//        Wall[] walls = {
+//                new Wall(250, 150, true, 15, brickImage),
+//                new Wall(150, 200, false, 15, brickImage),
+//                new Wall(800, 200, false, 15, brickImage),
+//        };
+//        this.walls.addAll(Arrays.asList(walls));
+        gameObjects.add(new Wall(250, 150, true, 15, brickImage));
+        gameObjects.add(new Wall(150, 200, false, 15, brickImage));
+        gameObjects.add(new Wall(800, 200, false, 15, brickImage));
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {//顯示坦克
-        playerTank.draw(g);
-        for (Tank tank : enemyTanks) {
-            tank.draw(g);
+        for (GameObject object : gameObjects) {
+            object.draw(g);
         }
-        for (Wall wall : walls) {
-            wall.draw(g);
-        }
+//        playerTank.draw(g);
+//        for (Tank tank : enemyTanks) {
+//            tank.draw(g);
+//        }
+//        for (Wall wall : walls) {
+//            wall.draw(g);
+//        }
     }
 
     public int getCenterPosX(int width) {//(螢幕大小-圖檔大小)/2 X軸置中運算
