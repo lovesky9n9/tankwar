@@ -1,19 +1,15 @@
-import sun.security.mscapi.CPublicKey;
-
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
     private Tank playerTank;//玩家坦克
-    private List<GameObject> gameObjects = new ArrayList<>();//統一GameObject控管
-    private boolean stop;
+    private List<GameObject> objects = new ArrayList<>();//統一GameObject控管
 
     GameClient() {//預設視窗大小
         this(1024, 768);
@@ -28,7 +24,11 @@ public class GameClient extends JComponent {
     }
 
     public List<GameObject> getGameObjects() {
-        return gameObjects;
+        return objects;
+    }
+
+    public void addGameObject(GameObject gameObject) {//增加物件
+        objects.add(gameObject);
     }
 
     public GameClient(int screenWidth, int screenHeight) {
@@ -37,7 +37,7 @@ public class GameClient extends JComponent {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         init();
         new Thread(() -> {//設定執行緒持續更新畫面
-            while (!stop) {
+            while (true) {
                 repaint();
                 try {
                     Thread.sleep(50);
@@ -48,6 +48,8 @@ public class GameClient extends JComponent {
         }).start();
     }
 
+    public static Image[] bulletImage = new Image[8];//子彈圖片
+
     public void init() {//遊戲初始屬性
         Image[] brickImage = {Tools.getImage("brick")};
         Image[] iTankImage = new Image[8];
@@ -56,28 +58,36 @@ public class GameClient extends JComponent {
         for (int i = 0; i < iTankImage.length; i++) {
             iTankImage[i] = Tools.getImage("itank" + sub[i]);
             eTankImage[i] = Tools.getImage("etank" + sub[i]);
+            bulletImage[i] = Tools.getImage("missile" + sub[i]);
         }
         //玩家坦克
         playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN, iTankImage);
-        gameObjects.add(playerTank);
+        objects.add(playerTank);
         //敵方坦克enemyTanks
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                gameObjects.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
+                objects.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
             }
         }
         //圍牆walls
-        gameObjects.add(new Wall(250, 150, true, 15, brickImage));
-        gameObjects.add(new Wall(150, 200, false, 15, brickImage));
-        gameObjects.add(new Wall(800, 200, false, 15, brickImage));
+        objects.add(new Wall(250, 150, true, 15, brickImage));
+        objects.add(new Wall(100, 200, false, 15, brickImage));
+        objects.add(new Wall(850, 200, false, 15, brickImage));
     }
 
     @Override
     protected void paintComponent(Graphics g) {//顯示坦克
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getScreenWidth(), getScreenHeight());
-        for (GameObject object : gameObjects) {
+        for (GameObject object : objects) {
             object.draw(g);
+        }
+        //使用迭代器進行移除
+        Iterator<GameObject> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            if (!(iterator.next()).alive) {
+                iterator.remove();
+            }
         }
     }
 
@@ -100,9 +110,12 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_RIGHT:
                 dirs[3] = true;
                 break;
-//            case KeyEvent.VK_CONTROL:
-//                playerTank.fire();
-//                break;
+            case KeyEvent.VK_CONTROL:
+                playerTank.fire();
+                break;
+            case KeyEvent.VK_A:
+                playerTank.superFire();
+                break;
             default:
         }
     }
@@ -126,9 +139,18 @@ public class GameClient extends JComponent {
         }
     }
 
-//    public static Image[] bulletImage =new Image[8];//子彈圖片
-
-//    public void addGameObject(GameObject gameObject){//增加物件
-//        gameObjects.add(gameObject);
-//    }
+    public void checkGameStatus(){
+        boolean gameWin=true;
+        for(GameObject object:objects){
+            if(object instanceof Tank){
+                gameWin=false;
+            }
+        }
+        if(gameWin){
+            for(int i=0;i<3;i++){
+                for(int j=0;j<4;j++){
+                }
+            }
+        }
+    }
 }

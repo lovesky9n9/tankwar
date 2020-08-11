@@ -8,6 +8,7 @@ public abstract class GameObject {
     protected int height;
     protected int oldX;
     protected int oldY;
+    protected boolean alive = true;
 
     public GameObject(int x, int y, Image[] image) {
         this.x = x;
@@ -16,11 +17,9 @@ public abstract class GameObject {
         width = image[0].getWidth(null);
         height = image[0].getHeight(null);
     }
-
     //取得物件寬度
     public Rectangle getRectangle() {
         return new Rectangle(x, y, width, height);
     }
-
     abstract void draw(Graphics g);
 }

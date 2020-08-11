@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tank extends GameObject {
-    private int speed;
-    private Direction direction;
-    private boolean[] dirs = new boolean[4];//上下左右四個方向
-    private boolean enemy;
+    protected int speed;
+    protected Direction direction;
+    protected boolean[] dirs = new boolean[4];//上下左右四個方向
+    protected boolean enemy;
 
     public Tank(int x, int y, Direction direction, Image[] image) {//玩家坦克
         this(x, y, direction, false, image);
@@ -144,9 +144,16 @@ public class Tank extends GameObject {
             }
         }
     }
-
-//    public void fire(){
-//        TankWar.gameClient.addGameObject();
-//    }
+    public void fire(){//發設子彈
+        TankWar.gameClient.addGameObject(
+                new Bullet(x,y,direction,false,GameClient.bulletImage));
+    }
+    public void superFire(){//八方向發射
+        for(Direction direction:Direction.values()){
+            Bullet bullet=new Bullet(x,y,direction,false,GameClient.bulletImage);
+            bullet.setSpeed(15);
+            TankWar.gameClient.addGameObject(bullet);
+        }
+    };
 }
 
