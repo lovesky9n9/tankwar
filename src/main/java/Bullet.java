@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Bullet extends Tank {
+public class Bullet extends MoveObject {
     public Bullet(int x, int y, Direction direction, boolean enemy, Image[] image) {
         super(x, y, direction, enemy, image);
         speed = 10;
@@ -18,6 +18,10 @@ public class Bullet extends Tank {
 
     @Override
     public void collision() {
+        if(collisionBound()){//邊界偵測
+            alive=false;
+            return;
+        }
         for (GameObject object : TankWar.gameClient.getGameObjects()) {
             if (object == this) {
                 continue;

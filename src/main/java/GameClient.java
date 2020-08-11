@@ -49,11 +49,11 @@ public class GameClient extends JComponent {
     }
 
     public static Image[] bulletImage = new Image[8];//子彈圖片
+    public static Image[] eTankImage = new Image[8];//敵方坦克圖片
 
     public void init() {//遊戲初始屬性
         Image[] brickImage = {Tools.getImage("brick")};
         Image[] iTankImage = new Image[8];
-        Image[] eTankImage = new Image[8];
         String[] sub = {"U", "D", "L", "R", "LU", "RU", "LD", "RD"};
         for (int i = 0; i < iTankImage.length; i++) {
             iTankImage[i] = Tools.getImage("itank" + sub[i]);
@@ -89,6 +89,7 @@ public class GameClient extends JComponent {
                 iterator.remove();
             }
         }
+//        System.out.println(objects.size());
     }
 
     public int getCenterPosX(int width) {//(螢幕大小-圖檔大小)/2 X軸置中運算
@@ -149,6 +150,7 @@ public class GameClient extends JComponent {
         if(gameWin){
             for(int i=0;i<3;i++){
                 for(int j=0;j<4;j++){
+                    addGameObject((new Tank(360 + j * 80, 500 + i * 80, Direction.UP, eTankImage)));
                 }
             }
         }
