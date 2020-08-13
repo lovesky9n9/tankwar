@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
-    private Tank playerTank;//玩家坦克
+    private PlayerTank playerTank;//玩家坦克
     private CopyOnWriteArrayList<GameObject> objects = new CopyOnWriteArrayList<>();//統一GameObject控管
 
     GameClient() {//預設視窗大小
@@ -32,6 +32,8 @@ public class GameClient extends JComponent {
     }
 
     public GameClient(int screenWidth, int screenHeight) {
+        com.sun.javafx.application.PlatformImpl.startup(()->{});
+
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -52,6 +54,7 @@ public class GameClient extends JComponent {
     public static Image[] explosionImage = new Image[11];//爆炸圖片
 
     public void init() {//遊戲初始屬性
+        objects.clear();
         Image[] brickImage = {Tools.getImage("brick")};
         Image[] iTankImage = new Image[8];
         Image[] eTankImage = new Image[8];//敵方坦克圖片
@@ -65,7 +68,7 @@ public class GameClient extends JComponent {
             explosionImage[i]=Tools.getImage(i +"");
         }
         //玩家坦克
-        playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN, iTankImage);
+        playerTank = new PlayerTank(getCenterPosX(47), 100, Direction.DOWN, iTankImage);
         objects.add(playerTank);
         //敵方坦克enemyTanks
         for (int i = 0; i < 3; i++) {
@@ -92,14 +95,6 @@ public class GameClient extends JComponent {
                 objects.remove(object);
             }
         }
-        //使用迭代器進行移除
-//        Iterator<GameObject> iterator = objects.iterator();
-//        while (iterator.hasNext()) {
-//            if (!(iterator.next()).alive) {
-//                iterator.remove();
-//            }
-//        }
-//        System.out.println(objects.size());
     }
 
     public int getCenterPosX(int width) {//(螢幕大小-圖檔大小)/2 X軸置中運算
@@ -127,13 +122,9 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_A:
                 playerTank.superFire();
                 break;
-//            case KeyEvent.VK_F2:
-//                for(GameObject object:objects){
-//                    if(object instanceof EnemyTank){
-//                        objects.remove(object);
-//                    }
-//                }
-//                break;
+            case KeyEvent.VK_F2:
+                init();
+                break;
             default:
         }
     }

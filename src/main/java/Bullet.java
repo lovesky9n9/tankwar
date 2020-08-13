@@ -3,7 +3,7 @@ import java.awt.*;
 public class Bullet extends MoveObject {
     public Bullet(int x, int y, Direction direction, boolean enemy, Image[] image) {
         super(x, y, direction, enemy, image);
-        speed = 10;
+        setSpeed(10);
     }
 
     @Override

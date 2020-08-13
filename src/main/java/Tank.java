@@ -8,7 +8,7 @@ public class Tank extends MoveObject {
     }
 
     public Tank(int x, int y, Direction direction, boolean enemy, Image[] image) {//敵方坦克
-        super(x, y,direction,enemy, image);
+        super(x, y, direction, enemy, image);
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -51,7 +51,7 @@ public class Tank extends MoveObject {
 
     public boolean collision() {//碰撞偵測
         //邊界偵測
-        if(collisionBound()){
+        if (collisionBound()) {
             return true;
         }
         //圍牆、敵方坦克碰撞偵測
@@ -61,18 +61,18 @@ public class Tank extends MoveObject {
                 y = oldY;
                 return true;
             }
-        }return false;
-    }
-    public void fire(){//發設子彈
-        TankWar.gameClient.addGameObject(
-                new Bullet(x,y,direction,enemy,GameClient.bulletImage));
-    }
-    public void superFire(){//八方向發射
-        for(Direction direction:Direction.values()){
-            Bullet bullet=new Bullet(x,y,direction,false,GameClient.bulletImage);
-            bullet.setSpeed(15);
-            TankWar.gameClient.addGameObject(bullet);
         }
-    };
+        return false;
+    }
+
+    public void fire() {//發設子彈
+        TankWar.gameClient.addGameObject(
+                new Bullet(x + width / 2 - GameClient.bulletImage[0].getWidth(null) / 2,
+                        y + height / 2 - GameClient.bulletImage[0].getHeight(null) / 2,
+                        direction, enemy, GameClient.bulletImage));
+//        if(!enemy){
+//            Tools.playAudio("shoot.wav");
+//        }
+    }
 }
 
