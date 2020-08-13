@@ -9,6 +9,7 @@ public abstract class GameObject {
     protected int oldX;
     protected int oldY;
     protected boolean alive;
+    protected int frame;
 
     public GameObject(int x, int y, Image[] image) {
         this.x = x;

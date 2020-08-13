@@ -49,21 +49,23 @@ public class Tank extends MoveObject {
         return false;
     }
 
-    public void collision() {//碰撞偵測
+    public boolean collision() {//碰撞偵測
         //邊界偵測
-        collisionBound();
+        if(collisionBound()){
+            return true;
+        }
         //圍牆、敵方坦克碰撞偵測
         for (GameObject object : TankWar.gameClient.getGameObjects()) {
             if (object != this && object.getRectangle().intersects(this.getRectangle())) {
                 x = oldX;
                 y = oldY;
-                return;
+                return true;
             }
-        }
+        }return false;
     }
     public void fire(){//發設子彈
         TankWar.gameClient.addGameObject(
-                new Bullet(x,y,direction,false,GameClient.bulletImage));
+                new Bullet(x,y,direction,enemy,GameClient.bulletImage));
     }
     public void superFire(){//八方向發射
         for(Direction direction:Direction.values()){

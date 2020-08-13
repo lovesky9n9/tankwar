@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameClient extends JComponent {
     private int screenWidth;
     private int screenHeight;
     private Tank playerTank;//玩家坦克
-    private List<GameObject> objects = new ArrayList<>();//統一GameObject控管
+    private CopyOnWriteArrayList<GameObject> objects = new CopyOnWriteArrayList<>();//統一GameObject控管
 
     GameClient() {//預設視窗大小
         this(1024, 768);
@@ -49,16 +49,20 @@ public class GameClient extends JComponent {
     }
 
     public static Image[] bulletImage = new Image[8];//子彈圖片
-    public static Image[] eTankImage = new Image[8];//敵方坦克圖片
+    public static Image[] explosionImage = new Image[11];//爆炸圖片
 
     public void init() {//遊戲初始屬性
         Image[] brickImage = {Tools.getImage("brick")};
         Image[] iTankImage = new Image[8];
+        Image[] eTankImage = new Image[8];//敵方坦克圖片
         String[] sub = {"U", "D", "L", "R", "LU", "RU", "LD", "RD"};
         for (int i = 0; i < iTankImage.length; i++) {
             iTankImage[i] = Tools.getImage("itank" + sub[i]);
             eTankImage[i] = Tools.getImage("etank" + sub[i]);
             bulletImage[i] = Tools.getImage("missile" + sub[i]);
+        }
+        for(int i=0;i<explosionImage.length;i++){
+            explosionImage[i]=Tools.getImage(i +"");
         }
         //玩家坦克
         playerTank = new Tank(getCenterPosX(47), 100, Direction.DOWN, iTankImage);
@@ -66,7 +70,7 @@ public class GameClient extends JComponent {
         //敵方坦克enemyTanks
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                objects.add(new Tank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
+                objects.add(new EnemyTank(360 + j * 80, 500 + i * 80, Direction.UP, true, eTankImage));
             }
         }
         //圍牆walls
@@ -82,13 +86,19 @@ public class GameClient extends JComponent {
         for (GameObject object : objects) {
             object.draw(g);
         }
-        //使用迭代器進行移除
-        Iterator<GameObject> iterator = objects.iterator();
-        while (iterator.hasNext()) {
-            if (!(iterator.next()).alive) {
-                iterator.remove();
+        for (GameObject object : objects) {
+            //移除死亡坦克
+            if (!object.alive) {
+                objects.remove(object);
             }
         }
+        //使用迭代器進行移除
+//        Iterator<GameObject> iterator = objects.iterator();
+//        while (iterator.hasNext()) {
+//            if (!(iterator.next()).alive) {
+//                iterator.remove();
+//            }
+//        }
 //        System.out.println(objects.size());
     }
 
@@ -117,6 +127,13 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_A:
                 playerTank.superFire();
                 break;
+//            case KeyEvent.VK_F2:
+//                for(GameObject object:objects){
+//                    if(object instanceof EnemyTank){
+//                        objects.remove(object);
+//                    }
+//                }
+//                break;
             default:
         }
     }
@@ -140,19 +157,19 @@ public class GameClient extends JComponent {
         }
     }
 
-    public void checkGameStatus(){
-        boolean gameWin=true;
-        for(GameObject object:objects){
-            if(object instanceof Tank){
-                gameWin=false;
-            }
-        }
-        if(gameWin){
-            for(int i=0;i<3;i++){
-                for(int j=0;j<4;j++){
-                    addGameObject((new Tank(360 + j * 80, 500 + i * 80, Direction.UP, eTankImage)));
-                }
-            }
-        }
-    }
+//    public void checkGameStatus(){
+//        boolean gameWin=true;
+//        for(GameObject object:objects){
+//            if(object instanceof EnemyTank){
+//                gameWin=false;
+//            }
+//        }
+//        if(gameWin){
+//            for(int i=0;i<3;i++){
+//                for(int j=0;j<4;j++){
+//                    addGameObject((new Tank(360 + j * 80, 500 + i * 80, Direction.UP, eTankImage)));
+//                }
+//            }
+//        }
+//    }
 }
